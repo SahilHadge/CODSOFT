@@ -1,0 +1,69 @@
+//SAHIL HADGEimport java.util.Random;
+import java.util.Scanner;
+
+public class NumberGame {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        int lB = 1;
+        int uB = 100;
+        int maxAttempts = 10;
+
+        System.out.println("Welcome to Number Guesser Game!!");
+        int totalScore = playGame(scanner, random, lB, uB, maxAttempts);
+
+        System.out.println("Your final score: " + totalScore);
+        System.out.println("Thanks for playing!");
+
+        scanner.close();
+    }
+
+    private static int playGame(Scanner scanner, Random random, int lB, int uB, int maxAttempts) {
+        int totalScore = 0;
+        boolean playAgain = true;
+
+        while (playAgain) {
+            int randomNumber = generateRandomNumber(random, lB, uB);
+            System.out.println("I have generated a number between " + lB + " and " + uB);
+
+            int attempts = 0;
+
+            while (attempts < maxAttempts) {
+                System.out.print("Enter your guess: ");
+                int userGuess = scanner.nextInt();
+                attempts++;
+
+                if (userGuess == randomNumber) {
+                    System.out.println("Congratulations! You guessed the number in " + attempts + " attempts.");
+                    int roundScore = calculateScore(attempts);
+                    totalScore += roundScore;
+                    System.out.println("Round score: " + roundScore);
+                    break;
+                } else if (userGuess < randomNumber) {
+                    System.out.println("Too low! Try again.");
+                } else {
+                    System.out.println("Too high! Try again.");
+                }
+            }
+
+            if (attempts == maxAttempts) {
+                System.out.println("Sorry, you've run out of attempts. The correct number was: " + randomNumber);
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            playAgain = scanner.next().equalsIgnoreCase("yes");
+        }
+
+        return totalScore;
+    }
+
+    private static int generateRandomNumber(Random random, int lB, int uB) {
+        return random.nextInt(uB - lB + 1) + lB;
+    }
+
+    private static int calculateScore(int attempts) {
+        return 100 - (attempts - 1) * 10;
+    }
+}
